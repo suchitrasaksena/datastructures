@@ -32,44 +32,21 @@ void write_responses(const vector<string>& result) {
 
 vector<string> process_queries(const vector<Query>& queries) {
     vector<string> result;
-    // Keep list of all existing (i.e. not deleted yet) contacts.
-    vector<Query> contacts;
-	vector<Query> contactsDA(10000000);
+    vector<string> contacts(10000000, "");
     for (size_t i = 0; i < queries.size(); ++i)
-        if (queries[i].type == "add") {
-            // bool was_founded = false;
-            // // if we already have contact with such number,
-            // // we should rewrite contact's name
-            // for (size_t j = 0; j < contacts.size(); ++j)
-                // if (contacts[j].number == queries[i].number) {
-                    // contacts[j].name = queries[i].name;
-                    // was_founded = true;
-                    // break;
-                // }
-            // // otherwise, just add it
-            // if (!was_founded)
-                // contacts.push_back(queries[i]);
-			contactsDA[queries[i].number] = queries[i];
+    {
+	if (queries[i].type == "add") {
+			contacts[queries[i].number] = queries[i].name;
         } else if (queries[i].type == "del") {
-            // for (size_t j = 0; j < contacts.size(); ++j)
-                // if (contacts[j].number == queries[i].number) {
-                    // contacts.erase(contacts.begin() + j);
-                    // break;
-                // }
-			contactsDA[queries[i].number].name = "";
-			contactsDA[queries[i].number].number = 0;
+			contacts[queries[i].number] = "";
         } else {
             string response = "not found";
-            // for (size_t j = 0; j < contacts.size(); ++j)
-                // if (contacts[j].number == queries[i].number) {
-                    // response = contacts[j].name;
-                    // break;
-                // }
-			if(contactsDA[queries[i].number].name != "")
-				response = contactsDA[queries[i].number].name;
+			if(contacts[queries[i].number] != "")
+				response = contacts[queries[i].number];
 
 			result.push_back(response);
         }
+    }
     return result;
 }
 
